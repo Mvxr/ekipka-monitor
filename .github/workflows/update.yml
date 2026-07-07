@@ -1,0 +1,60 @@
+name: Aktualizacja ekipy
+
+
+on:
+
+  schedule:
+
+    - cron: "0 */6 * * *"
+
+
+  workflow_dispatch:
+
+
+
+jobs:
+
+  update:
+
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+
+
+    - name: Pobranie repo
+      uses: actions/checkout@v4
+
+
+
+    - name: Instalacja bibliotek
+      run: |
+
+        pip install requests
+
+
+
+    - name: Pobierz ekipę
+      run: |
+
+        python update_staff.py
+
+
+
+    - name: Zapisz zmiany
+      run: |
+
+
+        git config user.name "github-actions"
+
+        git config user.email "actions@github.com"
+
+
+        git add staff.json
+
+
+        git commit -m "Aktualizacja ekipy" || exit 0
+
+
+        git push
